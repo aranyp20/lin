@@ -1,8 +1,7 @@
 #include <iostream>
 
 #include "DataLayer/DataAccess.h"
-
-
+#include "Network/CommandServer.h"
 
 
 
@@ -11,11 +10,11 @@
 int main()
 {
     
-    account acc(account::reg_reqs("Arany Peti","1234"));
-
     data_accessor da;
-    //da.insert_user(acc);
-    da.list_users();
+
+
+    command_server cs(&da);
+    cs.Run();
 
     return 0;
 }

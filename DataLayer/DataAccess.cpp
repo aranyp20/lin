@@ -18,21 +18,19 @@ sql_connection::~sql_connection()
     mysql_close(con);
 }
 
-void sql_connection::execute_query(const char *sql_query){
+records sql_connection::execute_query(const char *sql_query){
     if(mysql_query(con,sql_query)){
         std::cout<<"Query error: "<<mysql_error(con) << std::endl;
         exit(1);
     }
 
     MYSQL_RES* res = mysql_use_result(con);
-    MYSQL_ROW row;
+    unsigned long row_length = mysql_field_count(con); 
 
-    std::cout<<"Output:\n"<< std::endl;
-    while((row = mysql_fetch_row(res))!=NULL){
-        std::cout<<row[1]<<std::endl;
-    }
+    records result(res,row_length);
+
     mysql_free_result(res);
-
+    return result;
 }
 
 
@@ -47,10 +45,11 @@ sql_connection data_accessor::create_connection()
     return sql_connection(mysqlD);
 }
 
-void data_accessor::list_users()
+records data_accessor::get_users()
 {
+
     sql_connection connection = create_connection();
-    connection.execute_query("SELECT * FROM Users;");
+    return connection.execute_query("SELECT * FROM Users;");
 }
 
 void data_accessor::insert_user(const account& account)

@@ -20,7 +20,7 @@ public:
     sql_connection(connection_details&);
     ~sql_connection();
 
-    void execute_query(const char*);
+    records execute_query(const char*);
 
 };
 
@@ -33,7 +33,7 @@ public:
     void insert_user(const account&);
     void insert_task(const task&);
 
-    void list_users();
+    records get_users();
 
 
 };
