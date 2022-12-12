@@ -26,11 +26,14 @@ records sql_connection::execute_query(const char *sql_query){
 
     MYSQL_RES* res = mysql_use_result(con);
     unsigned long row_length = mysql_field_count(con); 
+    if(row_length>0){
+        records result(res,row_length);
 
-    records result(res,row_length);
+        mysql_free_result(res);
+        return result;
+    }
 
-    mysql_free_result(res);
-    return result;
+    return records();
 }
 
 //TODO: close connection
@@ -57,7 +60,6 @@ void data_accessor::insert_user(const account& account)
     sql_connection connection = create_connection();
   
     std::string query = "INSERT INTO Users(username) VALUES('" + account.get_username() + "');";
-    std::cout<<query<<std::endl;
 
     connection.execute_query(query.c_str());
 }

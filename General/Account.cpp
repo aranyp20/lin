@@ -18,6 +18,11 @@ account::account(const std::vector<std::string>& record)
     username = record[1];
 }
 
+account::account(const std::string& usr) :username(usr)
+{
+
+}
+
 
 
 

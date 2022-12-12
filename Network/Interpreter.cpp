@@ -32,6 +32,8 @@ server_answer interpreter::interpret(const request& req) const
         break;
         case 2:
             if(req.args[0]=="login") return r_login(req.args[1]);
+            else if(req.args[0]=="register") return r_register(req.args[1]);
+
         break;
     }
 
@@ -53,4 +55,12 @@ server_answer interpreter::r_logout() const
     server_answer res("Logged out.");
     res.int_code=server_answer::internal_code::LOGOUT;
     return res;
+}
+
+server_answer interpreter::r_register(const std::string& username) const
+{
+    //if(!(accessor->insert_user(account(username)).is_valid()))return server_answer("Unsuccessful registration.");
+    accessor->insert_user(account(username));
+
+    return server_answer("Registered.");
 }

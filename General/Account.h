@@ -19,6 +19,7 @@ public:
         reg_reqs(const std::string&, const std::string&);   
     };
 
+    account(const std::string&);
     account(const reg_reqs&);
     account(const std::vector<std::string>&);
     account(){}

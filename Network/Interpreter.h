@@ -15,6 +15,8 @@ class interpreter{
 
     server_answer r_login(const std::string& username) const;
     server_answer r_logout() const;
+    server_answer r_register(const std::string& username) const;
+
 
 public:
 
