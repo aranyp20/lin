@@ -1,20 +1,14 @@
-
-
 -- @block
+
 drop table Tasks;
+
 
 drop table Finished;
 
-drop table Courses;
 
 drop table Users;
 
-
--- @block
-
-SELECT * FROM Finished;
-
--- @block
+drop table Courses;
 
 
 CREATE TABLE Courses(
@@ -66,8 +60,6 @@ CREATE TABLE Tasks(
 );
 
 
--- @block
-
 
 
 INSERT INTO Courses(code) VALUES('BMEVII001');
@@ -76,10 +68,10 @@ INSERT INTO Courses(code) VALUES('BMEVII003');
 INSERT INTO Courses(code) VALUES('BMEVII004');
 INSERT INTO Courses(code) VALUES('BMEVII005');
 
-INSERT INTO Users(username) VALUES('Teszt Elek');
-INSERT INTO Users(username) VALUES('Minta Janos');
+INSERT INTO Users(username) VALUES('Teszt_Elek');
+INSERT INTO Users(username) VALUES('Minta_Janos');
 INSERT INTO Users(username) VALUES('Bob');
-INSERT INTO Users(username) VALUES('Eros Pista');
+INSERT INTO Users(username) VALUES('Eros_Pista');
 INSERT INTO Users(username) VALUES('Mary');
 
 INSERT INTO Finished(user_id,course_id) VALUES(1,1);
@@ -87,11 +79,3 @@ INSERT INTO Finished(user_id,course_id) VALUES(2,1);
 INSERT INTO Finished(user_id,course_id) VALUES(1,2);
 INSERT INTO Finished(user_id,course_id) VALUES(4,1);
 INSERT INTO Finished(user_id,course_id) VALUES(4,2);
-
-
-
-
-
-
-
-

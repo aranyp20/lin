@@ -32,7 +32,6 @@ records sql_connection::execute_query(const char *sql_query){
         mysql_free_result(res);
         return result;
     }
-
     return records();
 }
 
@@ -64,9 +63,13 @@ void data_accessor::insert_user(const account& account)
     connection.execute_query(query.c_str());
 }
 
-void insert_task(const task& task)
+int data_accessor::insert_task(const task& task)
 {
-
+    sql_connection connection = create_connection();
+    std::string query = "insert into Tasks(code,reward,master_id) (select '"+task.code+"',"+std::to_string(task.reward)+",min(user_id) from Users where username='"+task.master.get_username()+"');";
+    std::cout<<query<<std::endl;
+    connection.execute_query(query.c_str());
+     return 10;
 }
 
 records data_accessor::get_user(const std::string& username)
@@ -77,3 +80,12 @@ records data_accessor::get_user(const std::string& username)
     return connection.execute_query(query.c_str());
 
 }
+
+records data_accessor::get_tasks_available(const std::string& username)
+{
+    sql_connection connection = create_connection();
+    std::string query = "SELECT * FROM Users;";
+    return connection.execute_query(query.c_str());
+
+}
+

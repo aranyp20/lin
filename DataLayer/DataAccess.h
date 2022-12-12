@@ -31,10 +31,11 @@ class data_accessor{
 public:
 
     void insert_user(const account&);
-    void insert_task(const task&);
+    int insert_task(const task&);
 
     records get_users();
     records get_user(const std::string&);
+    records get_tasks_available(const std::string&);
 
 
 };

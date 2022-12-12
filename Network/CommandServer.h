@@ -53,7 +53,7 @@ class assistant : public MyThread{
 
   void send_records(const records&) const;
   void send_answer(const server_answer&) const;
-  void recieve_file() const;
+  void recieve_file(const std::string&) const;
 
 protected:
 

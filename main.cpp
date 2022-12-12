@@ -12,7 +12,6 @@ int main()
     
     data_accessor da;
 
-
     command_server cs(&da);
     cs.Run();
 

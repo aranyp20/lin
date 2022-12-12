@@ -22,7 +22,7 @@ void assistant::send_answer(const server_answer& answer) const
   write(socket,"#",2);
 }
 
-void assistant::recieve_file() const
+void assistant::recieve_file(const std::string& filename) const
 {
   std::cout<<"A file is comming..."<<std::endl;
 
@@ -30,8 +30,8 @@ void assistant::recieve_file() const
   char read_buf[1024];
   int write_fd;
 
-
-  write_fd = open("./FileHolder/Descriptions/testRec.txt",O_RDWR | O_CREAT, 0777);
+  std::string t_fname = "./"+filename+".txt";
+  write_fd = open(t_fname.c_str(),O_RDWR | O_CREAT, 0777);
   bool end = false;
    while(!end&&(read_len = recv(socket, read_buf, 1024, 0)) > 0){
       for(int i=0;i<read_len;i++){
@@ -187,6 +187,8 @@ void assistant::on_run()
           connected_acc = account(answ.recs.get_data_parsed()[0]);
         }else if(answ.int_code==server_answer::internal_code::LOGOUT){
           connected_acc = account();
+        }else if(answ.int_code==server_answer::internal_code::WAIT_FILE){
+          recieve_file(std::to_string(answ.int_help));
         }
        send_answer(answ);
       }

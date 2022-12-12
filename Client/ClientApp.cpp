@@ -9,6 +9,8 @@
 #include <sys/sendfile.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <vector>
+#include <string>
 #include "ClientApp.h"
 
 
@@ -54,6 +56,32 @@ void client::connect_to_server()
   freeaddrinfo(res);
 }
 
+void client::send_even_file(char* buf,int length) const
+{
+  std::vector<std::string> parsed;
+   std::string current_word;
+    for(int i=0;i<length;i++){
+        if(buf[i]==' '){
+            parsed.push_back(current_word);
+            current_word.clear();
+        }else{
+            current_word.push_back(buf[i]);
+        }
+    }
+    if(current_word.size()>0)parsed.push_back(current_word);
+
+    if(parsed.size()>0)parsed[parsed.size()-1].pop_back();
+
+
+    if(parsed.size()==3&&parsed[0]=="task"&&parsed[1]=="create"){
+      send(csock, buf, length, 0);
+      send_file(parsed[2]);
+    }else{
+      send(csock, buf, length, 0);
+    }
+}
+
+
 void client::run()
 {
     char buf[1024];
@@ -66,8 +94,7 @@ void client::run()
     while((len = read(STDIN_FILENO, buf, sizeof(buf))) > 0)
     {
       
-
-      send(csock, buf, len, 0);
+      send_even_file(buf,len);
       std::cout<<"------------------"<<std::endl;
       bool end = false;
       while(!end&&(read_len = recv(csock, read_buf, 1024, 0)) > 0){
@@ -88,14 +115,15 @@ void client::run()
 
 }
 
-void client::send_file()
+void client::send_file(const std::string& filename) const
 {
   std::cout<<"Küldés kezdete..."<<std::endl;
   int sendable_fd;
   struct stat sendable_stat;
   off_t offset = 0;
 
-  sendable_fd = open("./SendableFiles/testSend.txt", O_RDONLY);
+  std::string t_fname = "./Descriptions/"+filename+".txt";
+  sendable_fd = open(t_fname.c_str(), O_RDONLY);
   fstat(sendable_fd,&sendable_stat);
 
   sendfile(csock,sendable_fd,&offset,sendable_stat.st_size);

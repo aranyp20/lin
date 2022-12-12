@@ -28,16 +28,39 @@ server_answer interpreter::interpret(const request& req) const
 {
     switch(req.args.size()){
         case 1:
+            if(!req.requester.get_logged_in())return server_answer("Need to sign in.",false);
             if(req.args[0]=="logout") return r_logout();
         break;
         case 2:
             if(req.args[0]=="login") return r_login(req.args[1]);
             else if(req.args[0]=="register") return r_register(req.args[1]);
-
+        break;
+        case 3:
+            if(!req.requester.get_logged_in())return server_answer("Need to sign in.",false);
+            if(req.args[0]=="task"){
+                if(req.args[1]=="list"){
+                    if(req.args[2]=="available"){
+                        return r_task_list_available(req.requester.get_username());
+                    }
+                }
+                else if(req.args[1]=="create"){
+                    return r_task_create(task(req.requester,10,"xx4"));
+                }
+            } 
         break;
     }
 
     return server_answer("Unknown command.",false);
+}
+
+server_answer interpreter::r_task_create(const task& t) const
+{
+    server_answer answ;
+
+    answ.int_help = accessor->insert_task(t);
+    answ.int_code=server_answer::internal_code::WAIT_FILE;
+    return answ;
+
 }
 
 
@@ -63,4 +86,10 @@ server_answer interpreter::r_register(const std::string& username) const
     accessor->insert_user(account(username));
 
     return server_answer("Registered.");
+}
+
+
+server_answer interpreter::r_task_list_available(const std::string& username) const
+{
+    return accessor->get_tasks_available(username);
 }
