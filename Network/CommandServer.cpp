@@ -22,15 +22,17 @@ void assistant::send_answer(const server_answer& answer) const
   write(socket,"#",2);
 }
 
-void assistant::recieve_file(const std::string& filename) const
+void assistant::recieve_file(const std::string& filename, bool description) const
 {
   std::cout<<"A file is comming..."<<std::endl;
 
   int read_len;
   char read_buf[1024];
   int write_fd;
+  std::string t_fname ;
+  if(description)t_fname = "./Files/Descr/"+filename+".txt";
+  else t_fname = "./Files/Sol/"+filename+".txt";
 
-  std::string t_fname = "./"+filename+".txt";
   write_fd = open(t_fname.c_str(),O_RDWR | O_CREAT, 0777);
   bool end = false;
    while(!end&&(read_len = recv(socket, read_buf, 1024, 0)) > 0){

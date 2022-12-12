@@ -2,7 +2,6 @@
 
 drop table Tasks;
 
-
 drop table Finished;
 
 
@@ -48,16 +47,13 @@ CREATE TABLE Tasks(
     due DATE DEFAULT '2030-01-01',
 
     master_id INT,
-    slave_id INT,
-    required_task_id INT,
+    slave_id INT DEFAULT 0,
+    required_finished_id INT DEFAULT 0,
 
     CONSTRAINT task_id_pk_c PRIMARY KEY (task_id),
-    CONSTRAINT code_unique_c UNIQUE (code),
-    CONSTRAINT master_id_fk_c FOREIGN KEY (master_id) REFERENCES Users(user_id),
-    CONSTRAINT slave_id_fk_c FOREIGN KEY (slave_id) REFERENCES Users(user_id),
-    CONSTRAINT required_task_id_fk_ck FOREIGN KEY (required_task_id) REFERENCES Courses(course_id),
-    CONSTRAINT master_not_slave_ck_c CHECK(master_id != slave_id)
+    CONSTRAINT master_id_fk_c FOREIGN KEY (master_id) REFERENCES Users(user_id)
 );
+ALTER TABLE Tasks AUTO_INCREMENT=0;
 
 
 
@@ -79,3 +75,5 @@ INSERT INTO Finished(user_id,course_id) VALUES(2,1);
 INSERT INTO Finished(user_id,course_id) VALUES(1,2);
 INSERT INTO Finished(user_id,course_id) VALUES(4,1);
 INSERT INTO Finished(user_id,course_id) VALUES(4,2);
+
+

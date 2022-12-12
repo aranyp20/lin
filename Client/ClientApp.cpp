@@ -122,7 +122,7 @@ void client::send_file(const std::string& filename) const
   struct stat sendable_stat;
   off_t offset = 0;
 
-  std::string t_fname = "./Descriptions/"+filename+".txt";
+  std::string t_fname = "./Uploads/"+filename+".txt";
   sendable_fd = open(t_fname.c_str(), O_RDONLY);
   fstat(sendable_fd,&sendable_stat);
 

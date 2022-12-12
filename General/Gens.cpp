@@ -9,7 +9,7 @@ char* records::parse(const std::vector<std::string>& s) const
     for(const auto& a: s){
         strcpy(temp+i,a.c_str());
         i+=a.size();
-        temp[i++]='-';
+        temp[i++]=':';
     }
     temp[--i]= '\n';
 

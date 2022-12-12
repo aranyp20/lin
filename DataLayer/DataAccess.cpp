@@ -62,14 +62,14 @@ void data_accessor::insert_user(const account& account)
 
     connection.execute_query(query.c_str());
 }
-
 int data_accessor::insert_task(const task& task)
 {
     sql_connection connection = create_connection();
     std::string query = "insert into Tasks(code,reward,master_id) (select '"+task.code+"',"+std::to_string(task.reward)+",min(user_id) from Users where username='"+task.master.get_username()+"');";
-    std::cout<<query<<std::endl;
     connection.execute_query(query.c_str());
-     return 10;
+    query = "select max(task_id) from Tasks;";
+    records r = connection.execute_query(query.c_str());
+    return std::stoi(r.get_data_parsed()[0][0]);
 }
 
 records data_accessor::get_user(const std::string& username)
@@ -84,8 +84,10 @@ records data_accessor::get_user(const std::string& username)
 records data_accessor::get_tasks_available(const std::string& username)
 {
     sql_connection connection = create_connection();
-    std::string query = "SELECT * FROM Users;";
-    return connection.execute_query(query.c_str());
+    std::string query = "SELECT * FROM Tasks WHERE master_id NOT IN(select user_id from Users where username='"+username+"');";
+    records res = connection.execute_query(query.c_str());
+
+    return res;
 
 }
 

@@ -55,7 +55,7 @@ server_answer interpreter::interpret(const request& req) const
 
 server_answer interpreter::r_task_create(const task& t) const
 {
-    server_answer answ;
+    server_answer answ("Uploaded.");
 
     answ.int_help = accessor->insert_task(t);
     answ.int_code=server_answer::internal_code::WAIT_FILE;
