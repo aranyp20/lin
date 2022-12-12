@@ -185,6 +185,8 @@ void assistant::on_run()
         server_answer answ = inter.interpret(req);
         if(answ.int_code==server_answer::internal_code::LOGIN){
           connected_acc = account(answ.recs.get_data_parsed()[0]);
+        }else if(answ.int_code==server_answer::internal_code::LOGOUT){
+          connected_acc = account();
         }
        send_answer(answ);
       }

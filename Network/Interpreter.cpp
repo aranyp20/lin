@@ -28,6 +28,7 @@ server_answer interpreter::interpret(const request& req) const
 {
     switch(req.args.size()){
         case 1:
+            if(req.args[0]=="logout") return r_logout();
         break;
         case 2:
             if(req.args[0]=="login") return r_login(req.args[1]);
@@ -47,3 +48,9 @@ server_answer interpreter::r_login(const std::string& username) const
     return res;
 }
 
+server_answer interpreter::r_logout() const
+{
+    server_answer res("Logged out.");
+    res.int_code=server_answer::internal_code::LOGOUT;
+    return res;
+}

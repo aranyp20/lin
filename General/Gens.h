@@ -31,7 +31,8 @@ struct server_answer{
 
     enum internal_code{
         ONLY_EXTERNAL = 0,
-        LOGIN = 1
+        LOGIN = 1,
+        LOGOUT = 2
     };
 
     internal_code int_code = ONLY_EXTERNAL;

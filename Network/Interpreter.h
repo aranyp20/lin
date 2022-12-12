@@ -14,6 +14,7 @@ class interpreter{
     data_accessor* accessor;
 
     server_answer r_login(const std::string& username) const;
+    server_answer r_logout() const;
 
 public:
 
