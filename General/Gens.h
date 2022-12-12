@@ -14,17 +14,33 @@ class records{
 
 public:
 
+    records(){}
     records(MYSQL_RES*,unsigned long);
     ~records(){}
 
     const std::vector<char*> get_data_raw() const;
     const std::vector<std::vector<std::string>> get_data_parsed() const;
     const int get_row_bytes(size_t) const;
+    size_t get_row_count() const; 
 
     void print() const;
 
 };
 
+struct server_answer{
+
+    records recs;
+    std::string message;
+    bool success = false;
+
+    server_answer(const std::string&);
+    server_answer(const records&);
+    server_answer(const std::string&, const records&);
+    server_answer(){}
+
+    void print()const;
+
+};
 
 struct date{
 

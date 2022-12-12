@@ -17,6 +17,11 @@ char* records::parse(const std::vector<std::string>& s) const
     return temp;
 }
 
+size_t records::get_row_count() const
+{
+    return data_parsed.size();
+}
+
 void records::print() const
 {
     for(const auto& a : data_parsed){
@@ -55,3 +60,20 @@ const int records::get_row_bytes(size_t index) const
     }
     return result;
 }
+
+
+server_answer::server_answer(const std::string& mes) : message(mes)
+{
+    success = true;
+
+}
+
+server_answer::server_answer(const records& rec) : recs(rec)
+{
+    success = true;
+}
+server_answer::server_answer(const std::string& mes, const records& rec) : message(mes), recs(rec)
+{
+    success = true;
+}
+

@@ -1,12 +1,10 @@
 #include <iostream>
 #include "CommandServer.h"
-#include "../General/Gens.h"
-#include "../DataLayer/DataAccess.h"
 
 command_server::command_server(data_accessor* const _da) : my_accessor(_da)
 {}
 
-void assistant::send_records(const records& r, int socket) const
+void assistant::send_records(const records& r) const
 {
     std::vector<char*> res = r.get_data_raw();
     for(int i=0;i<res.size();i++){
@@ -14,7 +12,36 @@ void assistant::send_records(const records& r, int socket) const
     }
     write(socket,"#",2);
     
+}
 
+void assistant::send_answer(const server_answer& answer) const
+{ 
+  //write(socket,answer.message.c_str(),answer.message.size());
+  send_records(answer.recs);
+}
+
+void assistant::recieve_file() const
+{
+  std::cout<<"A file is comming..."<<std::endl;
+
+  int read_len;
+  char read_buf[1024];
+  int write_fd;
+
+
+  write_fd = open("./FileHolder/Descriptions/testRec.txt",O_RDWR | O_CREAT, 0777);
+  bool end = false;
+   while(!end&&(read_len = recv(socket, read_buf, 1024, 0)) > 0){
+      for(int i=0;i<read_len;i++){
+          if(read_buf[i] == '#'){
+            end = true;
+            break;
+          }
+          write(write_fd,&read_buf[i],1);
+      }
+   }
+   close(write_fd);    
+  std::cout<<"File was comming."<<std::endl;
 }
 
 
@@ -68,8 +95,6 @@ int command_server::create_socket(const char* port)
 
 void command_server::Run()
 {
-    std::cout<<"kurva"<<std::endl;
-
     int local_sock = create_socket("1111");
     if(local_sock<0)return;
 
@@ -137,7 +162,7 @@ void MyThread::join()
   pthread_join(_th, NULL);
 }
 
-assistant::assistant(data_accessor* const da,int socket) : my_accessor(da),socket(socket)
+assistant::assistant(data_accessor* const da,int socket) : inter(da),socket(socket)
 {
 
 }
@@ -149,7 +174,7 @@ void assistant::on_run()
   int len;
   while((len = recv(socket, buf, sizeof(buf), 0)) > 0)
     {
-        send_records(my_accessor->get_users(),socket);
+        //send_records(my_accessor->get_users());
     }
     
     printf("Kapcsolat zárása.\n");

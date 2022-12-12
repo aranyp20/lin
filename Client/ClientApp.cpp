@@ -6,84 +6,116 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <iostream>
+#include <sys/sendfile.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include "ClientApp.h"
 
-#define PORT "1111"
 
-
-int main()
+client::client()
 {
+  connect_to_server();
+}
 
+void client::connect_to_server()
+{
   struct addrinfo hints;
   struct addrinfo* res;
   int err;
-  int csock;
-  char buf[1024];
-  char read_buf[1024];
-  int len;
-  int read_len;
-  
 
-
-  /* kitöltjük a hints struktúrát */
   memset(&hints, 0, sizeof(hints));
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
 
-  /* végezzük el a névfeloldást */
   err = getaddrinfo("localhost", PORT, &hints, &res);
   if(err != 0)
   {
     fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(err));
-    return -1;
+    exit(1);
   }
   if(res == NULL)
   {
-    return -1;
+    exit(1);
   }
-  
-  /* létrehozzuk a kliens socketet */
+
+
   csock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
   if(csock < 0)
   {
     perror("socket");
-    return -1;
+    exit(1);
   }
-    
-  /* Kapcsolodunk a szerverhez. */
+
   if(connect(csock, res->ai_addr, res->ai_addrlen) < 0)
   {
     perror("connect");
-    return -1;
+    exit(1);
   }
-  
-  /* az STDIN_FILENO-n érkező adatokat elküldjük a socketen keresztül */
-  while((len = read(STDIN_FILENO, buf, sizeof(buf))) > 0)
-  {
-    send(csock, buf, len, 0);
-    
-    while((read_len = recv(csock, read_buf, 1024, 0)) > 0){
-      bool end = false;
-      for(int i=0;i<read_len;i++){
-        if(read_buf[i] == '#'){
-          end = true;
-          break;
-        }
-        printf("%c",read_buf[i]);
-      }
-      
-      if(end)break;
-    }
-    std::cout<<"Küldve."<<std::endl;
-  }
-  
-  /* lezárjuk a szerver socketet */
-  close(csock);
-
-  /* szabadítsuk fel a láncolt listát */
   freeaddrinfo(res);
+}
+
+void client::run()
+{
+    char buf[1024];
+    char read_buf[1024];
+    int len;
+    int read_len;
+    
+    
+    while((len = read(STDIN_FILENO, buf, sizeof(buf))) > 0)
+    {
+      send(csock, buf, len, 0);
+      
+      bool end = false;
+      while(!end&&(read_len = recv(csock, read_buf, 1024, 0)) > 0){
+        for(int i=0;i<read_len;i++){
+          if(read_buf[i] == '#'){
+            end = true;
+            break;
+          }
+          printf("%c",read_buf[i]);
+        }
+        
+      }
+
+
+    }
+
+}
+
+void client::send_file()
+{
+  std::cout<<"Küldés kezdete..."<<std::endl;
+  int sendable_fd;
+  struct stat sendable_stat;
+  off_t offset = 0;
+
+  sendable_fd = open("./SendableFiles/testSend.txt", O_RDONLY);
+  fstat(sendable_fd,&sendable_stat);
+
+  sendfile(csock,sendable_fd,&offset,sendable_stat.st_size);
+  write(csock,"#",2);
+
+
+
+  close(sendable_fd);
+  std::cout<<"Küldés vége."<<std::endl;
+}
+
+client::~client()
+{
+  close(csock);
+}
+
+int main()
+{
+
+
+  client fav_client;
+  fav_client.run();
 
 
 
 
-    return 0;
+  return 0;
 }

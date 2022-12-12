@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../General/Gens.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -10,6 +9,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <poll.h>
+#include <fcntl.h>
 
 
 class data_accessor;
@@ -20,6 +20,8 @@ class data_accessor;
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+
+#include "Interpreter.h"
 
 class MyThread
 {
@@ -40,14 +42,19 @@ protected:
   pthread_t _th;
 };
 
-
+//serves one client
 class assistant : public MyThread{
   int socket;
   bool dead = false;
 
-  data_accessor* my_accessor;
+  account connected_acc;
 
-  void send_records(const records&, int socket) const;
+  interpreter inter;
+
+  void send_records(const records&) const;
+  void send_answer(const server_answer&) const;
+  void recieve_file() const;
+
 protected:
 
   virtual void on_run();
@@ -59,7 +66,7 @@ public:
 
 };
 
-
+//manages connections and assistants
 class command_server{
 
   std::vector<assistant*> assistants;
