@@ -13,6 +13,8 @@ class interpreter{
 
     data_accessor* accessor;
 
+    server_answer r_login(const std::string& username) const;
+
 public:
 
     interpreter(data_accessor* const);

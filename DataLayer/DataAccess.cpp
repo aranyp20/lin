@@ -33,7 +33,7 @@ records sql_connection::execute_query(const char *sql_query){
     return result;
 }
 
-
+//TODO: close connection
 sql_connection data_accessor::create_connection()
 {
     sql_connection::connection_details mysqlD;
@@ -64,5 +64,14 @@ void data_accessor::insert_user(const account& account)
 
 void insert_task(const task& task)
 {
+
+}
+
+records data_accessor::get_user(const std::string& username)
+{
+    sql_connection connection = create_connection();
+    std::string query = "SELECT * FROM Users WHERE username ='"+ username +"';";
+
+    return connection.execute_query(query.c_str());
 
 }

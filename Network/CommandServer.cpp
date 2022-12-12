@@ -10,14 +10,16 @@ void assistant::send_records(const records& r) const
     for(int i=0;i<res.size();i++){
         write(socket, res[i], r.get_row_bytes(i));
     }
-    write(socket,"#",2);
     
 }
 
 void assistant::send_answer(const server_answer& answer) const
 { 
-  //write(socket,answer.message.c_str(),answer.message.size());
+  std::string sendable_msg = answer.message;
+  sendable_msg.push_back('\n');  sendable_msg.push_back('\n');
+  write(socket,sendable_msg.c_str(),sendable_msg.size());
   send_records(answer.recs);
+  write(socket,"#",2);
 }
 
 void assistant::recieve_file() const
@@ -174,7 +176,19 @@ void assistant::on_run()
   int len;
   while((len = recv(socket, buf, sizeof(buf), 0)) > 0)
     {
-        //send_records(my_accessor->get_users());
+      request req(connected_acc,buf,len);
+      if(req.args[0]=="user"){
+        if(connected_acc.get_logged_in())send_answer(server_answer(connected_acc.get_username()));
+        else send_answer(server_answer("Unknown"));
+        
+      }else{
+        server_answer answ = inter.interpret(req);
+        if(answ.int_code==server_answer::internal_code::LOGIN){
+          connected_acc = account(answ.recs.get_data_parsed()[0]);
+        }
+       send_answer(answ);
+      }
+      
     }
     
     printf("Kapcsolat zárása.\n");

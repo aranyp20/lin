@@ -61,11 +61,14 @@ void client::run()
     int len;
     int read_len;
     
+    std::cout<<ask_for_username(); fflush(stdout);
     
     while((len = read(STDIN_FILENO, buf, sizeof(buf))) > 0)
     {
-      send(csock, buf, len, 0);
       
+
+      send(csock, buf, len, 0);
+      std::cout<<"------------------"<<std::endl;
       bool end = false;
       while(!end&&(read_len = recv(csock, read_buf, 1024, 0)) > 0){
         for(int i=0;i<read_len;i++){
@@ -77,7 +80,9 @@ void client::run()
         }
         
       }
+      std::cout<<"------------------"<<std::endl<<std::endl;
 
+      std::cout<<ask_for_username(); fflush(stdout);
 
     }
 
@@ -107,9 +112,35 @@ client::~client()
   close(csock);
 }
 
+std::string client::ask_for_username() const
+{
+  const char* msg = "user";
+  write(csock,msg,5);
+
+  std::string res;
+  int read_len;
+  char read_buf[200];
+  //TODO: kulon fuggvenybe!!
+  bool end = false;
+      while(!end&&(read_len = recv(csock, read_buf, 200, 0)) > 0){
+        for(int i=0;i<read_len;i++){
+          if(read_buf[i] == '#'){
+            end = true;
+            break;
+          }
+          res.push_back(read_buf[i]);
+        }
+        
+      }
+      res.pop_back();
+      res[res.size()-1]='>';
+      res.push_back(' ');
+      return res;
+}
+
+
 int main()
 {
-
 
   client fav_client;
   fav_client.run();

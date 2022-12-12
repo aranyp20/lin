@@ -62,18 +62,18 @@ const int records::get_row_bytes(size_t index) const
 }
 
 
-server_answer::server_answer(const std::string& mes) : message(mes)
+server_answer::server_answer(const std::string& mes, bool _success) : message(mes),success(_success)
 {
-    success = true;
+    
 
 }
 
-server_answer::server_answer(const records& rec) : recs(rec)
+server_answer::server_answer(const records& rec,bool _success) : recs(rec),success(_success)
 {
-    success = true;
+    
 }
-server_answer::server_answer(const std::string& mes, const records& rec) : message(mes), recs(rec)
+server_answer::server_answer(const std::string& mes, const records& rec,bool _success) : message(mes), recs(rec),success(_success)
 {
-    success = true;
+    
 }
 

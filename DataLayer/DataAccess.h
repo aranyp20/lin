@@ -34,6 +34,7 @@ public:
     void insert_task(const task&);
 
     records get_users();
+    records get_user(const std::string&);
 
 
 };

@@ -15,7 +15,7 @@ account::account(const std::vector<std::string>& record)
 {
     if(record.size()!=4)return;
     logged_in = true;
-    username = record[0];
+    username = record[1];
 }
 
 

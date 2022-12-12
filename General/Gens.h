@@ -29,13 +29,20 @@ public:
 
 struct server_answer{
 
+    enum internal_code{
+        ONLY_EXTERNAL = 0,
+        LOGIN = 1
+    };
+
+    internal_code int_code = ONLY_EXTERNAL;
+
     records recs;
     std::string message;
     bool success = false;
 
-    server_answer(const std::string&);
-    server_answer(const records&);
-    server_answer(const std::string&, const records&);
+    server_answer(const std::string&,bool _success = true);
+    server_answer(const records&, bool _success = true);
+    server_answer(const std::string&, const records&,bool _success = true);
     server_answer(){}
 
     void print()const;
