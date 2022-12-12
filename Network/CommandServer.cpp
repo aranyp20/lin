@@ -48,6 +48,27 @@ void assistant::recieve_file(const std::string& filename, bool description) cons
   std::cout<<"File was comming."<<std::endl;
 }
 
+void assistant::send_file(const std::string& filename) const
+{
+  std::cout<<"Küldés kezdete..."<<std::endl;
+  int sendable_fd;
+  struct stat sendable_stat;
+  off_t offset = 0;
+
+  std::string t_fname = "./Files/Descr/"+filename+".txt";
+
+  sendable_fd = open(t_fname.c_str(), O_RDONLY);
+  fstat(sendable_fd,&sendable_stat);
+
+  sendfile(socket,sendable_fd,&offset,sendable_stat.st_size);
+  write(socket,"#",2);
+
+
+
+  close(sendable_fd);
+  std::cout<<"Küldés vége."<<std::endl;
+}
+
 
 
 int command_server::create_socket(const char* port)
@@ -191,6 +212,8 @@ void assistant::on_run()
           connected_acc = account();
         }else if(answ.int_code==server_answer::internal_code::WAIT_FILE){
           recieve_file(std::to_string(answ.int_help));
+        }else if(answ.int_code==server_answer::internal_code::SEND_FILE){
+          send_file(std::to_string(answ.int_help));
         }
        send_answer(answ);
       }

@@ -24,8 +24,21 @@ interpreter::interpreter(data_accessor* const da) : accessor(da)
 
 }
 
-server_answer interpreter::interpret(const request& req) const
+server_answer interpreter::interpret(const request& req)
 {
+    if(st==CAN_RESERVE){
+        if(req.args.size()==2){
+            if(req.args[0]=="reserve"){
+                int num = std::stoi(req.args[1]);
+                if(num>=0&&num<cache.get_row_count()){
+                   return r_task_reserve(cache.get_data_parsed()[num][0],req.requester.get_username());
+                }
+            }
+        }
+    }
+
+    st = DEF;
+
     switch(req.args.size()){
         case 1:
             if(!req.requester.get_logged_in())return server_answer("Need to sign in.",false);
@@ -40,7 +53,10 @@ server_answer interpreter::interpret(const request& req) const
             if(req.args[0]=="task"){
                 if(req.args[1]=="list"){
                     if(req.args[2]=="available"){
-                        return r_task_list_available(req.requester.get_username());
+                        st=CAN_RESERVE;
+                        server_answer t1 = r_task_list_available(req.requester.get_username());
+                        cache = t1.recs;
+                        return t1;
                     }
                 }
                 else if(req.args[1]=="create"){
@@ -93,3 +109,13 @@ server_answer interpreter::r_task_list_available(const std::string& username) co
 {
     return accessor->get_tasks_available(username);
 }
+
+server_answer interpreter::r_task_reserve(const std::string& id,const std::string& username) const
+{
+    accessor->assign_slave_to_task(id, username);
+    server_answer answ("Reserved.");
+    answ.int_code=server_answer::internal_code::SEND_FILE;
+    answ.int_help = std::atoi(id.c_str());
+    return answ;
+}
+

@@ -71,14 +71,22 @@ void client::send_even_file(char* buf,int length) const
     if(current_word.size()>0)parsed.push_back(current_word);
 
     if(parsed.size()>0)parsed[parsed.size()-1].pop_back();
+    bool sent = false;
 
+    if(parsed.size()==2&&parsed[0]=="reserve"){
+      send(csock, buf, length, 0);
+      recieve_file();
+      sent = true;
+    }
 
     if(parsed.size()==3&&parsed[0]=="task"&&parsed[1]=="create"){
       send(csock, buf, length, 0);
       send_file(parsed[2]);
-    }else{
-      send(csock, buf, length, 0);
+      sent = true;
     }
+    
+    if(!sent)send(csock, buf, length, 0);
+
 }
 
 
@@ -164,6 +172,30 @@ std::string client::ask_for_username() const
       res[res.size()-1]='>';
       res.push_back(' ');
       return res;
+}
+
+void client::recieve_file() const
+{
+  std::cout<<"A file is comming..."<<std::endl;
+
+  int read_len;
+  char read_buf[1024];
+  int write_fd;
+  std::string t_fname = "./Downloads/dwn.txt";
+
+  write_fd = open(t_fname.c_str(),O_RDWR | O_CREAT, 0777);
+  bool end = false;
+   while(!end&&(read_len = recv(csock, read_buf, 1024, 0)) > 0){
+      for(int i=0;i<read_len;i++){
+          if(read_buf[i] == '#'){
+            end = true;
+            break;
+          }
+          write(write_fd,&read_buf[i],1);
+      }
+   }
+   close(write_fd);    
+  std::cout<<"File was comming."<<std::endl;
 }
 
 

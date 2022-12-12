@@ -32,6 +32,7 @@ public:
 
     void insert_user(const account&);
     int insert_task(const task&);
+    void assign_slave_to_task(const std::string& id,const std::string& username);
 
     records get_users();
     records get_user(const std::string&);

@@ -91,3 +91,11 @@ records data_accessor::get_tasks_available(const std::string& username)
 
 }
 
+void data_accessor::assign_slave_to_task(const std::string& id, const std::string& username)
+{
+    sql_connection connection = create_connection();
+    std::string query = "update Tasks set slave_id = (select user_id from Users where username='"+username+"') where task_id ='"+id+"';";
+    connection.execute_query(query.c_str());
+}
+
+

@@ -20,6 +20,9 @@ class data_accessor;
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/sendfile.h>
 
 #include "Interpreter.h"
 
@@ -54,6 +57,8 @@ class assistant : public MyThread{
   void send_records(const records&) const;
   void send_answer(const server_answer&) const;
   void recieve_file(const std::string&, bool description = true) const;
+  void send_file(const std::string& filename) const;
+
 
 protected:
 

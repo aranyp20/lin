@@ -33,7 +33,8 @@ struct server_answer{
         ONLY_EXTERNAL = 0,
         LOGIN = 1,
         LOGOUT = 2,
-        WAIT_FILE = 3
+        WAIT_FILE = 3,
+        SEND_FILE = 4
     };
 
     internal_code int_code = ONLY_EXTERNAL;
