@@ -14,7 +14,7 @@ class client{
 
     std::string ask_for_username() const;
 
-    void send_even_file(char*,int) const;
+    bool send_even_file(char*,int) const;
 
 public:
     client();

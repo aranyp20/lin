@@ -43,7 +43,7 @@ server_answer interpreter::interpret(const request& req)
             if(req.args[0]=="upload"){
                 int num = std::stoi(req.args[1]);
                 if(num>=0&&num<cache.get_row_count()){
-                    server_answer answ;
+                    server_answer answ("New solution uploaded!");
                     answ.int_help = std::atoi(cache.get_data_parsed()[num][0].c_str());
                     answ.int_code=server_answer::internal_code::WAIT_FILE_S;
                     accessor->ready_task(cache.get_data_parsed()[num][0]);
@@ -105,6 +105,11 @@ server_answer interpreter::interpret(const request& req)
                     return r_task_create(task(req.requester,10,"xx4"));
                 }
             } 
+        break;
+        case 4:
+            if(req.args[0]=="task"&&req.args[1]=="create"){
+                return r_task_create(task(req.requester,10,req.args[2]));
+            }
         break;
     }
 

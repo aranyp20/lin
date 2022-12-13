@@ -1,0 +1,6 @@
+*.o
+prg
+Makefile
+*/cli
+.vscode/
+*.txt

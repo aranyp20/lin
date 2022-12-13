@@ -51,6 +51,7 @@ void assistant::recieve_file(const std::string& filename, bool description) cons
 void assistant::send_file(const std::string& filename, bool description) const
 {
   std::cout<<"Küldés kezdete..."<<std::endl;
+  sleep(2);
   int sendable_fd;
   struct stat sendable_stat;
   off_t offset = 0;
@@ -221,6 +222,7 @@ void assistant::on_run()
         }else if(answ.int_code==server_answer::internal_code::SEND_FILE_S){
           send_file(std::to_string(answ.int_help),false);
         }
+        sleep(1);
         send_answer(answ);
       }
       

@@ -56,7 +56,7 @@ void client::connect_to_server()
   freeaddrinfo(res);
 }
 
-void client::send_even_file(char* buf,int length) const
+bool client::send_even_file(char* buf,int length) const
 {
   std::vector<std::string> parsed;
    std::string current_word;
@@ -75,13 +75,12 @@ void client::send_even_file(char* buf,int length) const
 
     if(parsed.size()==2&&parsed[0]=="reserve"){
       send(csock, buf, length, 0);
-      recieve_file();
-      sent = true;
+      return false;
     }
 
-    if(parsed.size()==3&&parsed[0]=="task"&&parsed[1]=="create"){
+    if(parsed.size()==4&&parsed[0]=="task"&&parsed[1]=="create"){
       send(csock, buf, length, 0);
-      send_file(parsed[2]);
+      send_file(parsed[3]);
       sent = true;
     }
 
@@ -92,13 +91,13 @@ void client::send_even_file(char* buf,int length) const
     } 
      if(parsed.size()==2&&parsed[0]=="check"){
       send(csock, buf, length, 0);
-      recieve_file();
-      sent = true;
+      return false;
     } 
 
     
     if(!sent)send(csock, buf, length, 0);
 
+    return true;
 }
 
 
@@ -113,11 +112,11 @@ void client::run()
     while((len = read(STDIN_FILENO, buf, sizeof(buf))) > 0)
     {
       
-    std::cout<<"here."<<std::endl;
-      send_even_file(buf,len);
+      bool need_read = send_even_file(buf,len);
+      if(!need_read)recieve_file();
       std::cout<<"------------------"<<std::endl;
       bool end = false;
-      while(!end&&(read_len = recv(csock, read_buf, 1024, 0)) > 0){
+      while( !end&&(read_len = recv(csock, read_buf, 1024, 0)) > 0){
         for(int i=0;i<read_len;i++){
           if(read_buf[i] == '#'){
             end = true;
@@ -129,7 +128,8 @@ void client::run()
       }
       std::cout<<"------------------"<<std::endl<<std::endl;
 
-      sleep(3);
+
+
       std::cout<<ask_for_username(); fflush(stdout);
 
     }
