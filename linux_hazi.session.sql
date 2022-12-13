@@ -42,7 +42,7 @@ CREATE TABLE Finished(
 
 CREATE TABLE Tasks(
     task_id INT AUTO_INCREMENT,
-    code VARCHAR(10),
+    code VARCHAR(50),
     reward INT,
     due DATE DEFAULT '2030-01-01',
 

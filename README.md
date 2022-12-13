@@ -16,7 +16,7 @@ A program az alábbi funkciókkal fog rendelkezni:
 Milyen funkciókat sikerült megvalósítani? Milyen eltérések vannak a kiíráshoz képest? Hogyan kell bekonfigurálni, elindítani?
 
 **Bemutató videó URL:**
-(Szerepeljen benne minden lényeges funkció és az esetleges eltérések a kiíráshoz képest. max. 5 perc)
+ https://youtu.be/CzOj-gtWJ-I 
 
 # Tapasztalatok
 Milyen tapasztalatokat gyűjtött a feladat elkészítése során? Mi volt egyszerűbb / nehezebb a tervezetnél? Visszatekintve mit csinálna másként? (pár mondatban)
