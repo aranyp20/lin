@@ -48,14 +48,16 @@ void assistant::recieve_file(const std::string& filename, bool description) cons
   std::cout<<"File was comming."<<std::endl;
 }
 
-void assistant::send_file(const std::string& filename) const
+void assistant::send_file(const std::string& filename, bool description) const
 {
   std::cout<<"Küldés kezdete..."<<std::endl;
   int sendable_fd;
   struct stat sendable_stat;
   off_t offset = 0;
 
-  std::string t_fname = "./Files/Descr/"+filename+".txt";
+  std::string t_fname;
+  if(description)t_fname = "./Files/Descr/"+filename+".txt";
+  else t_fname = "./Files/Sol/"+filename+".txt";
 
   sendable_fd = open(t_fname.c_str(), O_RDONLY);
   fstat(sendable_fd,&sendable_stat);
@@ -216,8 +218,10 @@ void assistant::on_run()
           send_file(std::to_string(answ.int_help));
         }else if(answ.int_code==server_answer::internal_code::WAIT_FILE_S){
           recieve_file(std::to_string(answ.int_help),false);
+        }else if(answ.int_code==server_answer::internal_code::SEND_FILE_S){
+          send_file(std::to_string(answ.int_help),false);
         }
-       send_answer(answ);
+        send_answer(answ);
       }
       
     }

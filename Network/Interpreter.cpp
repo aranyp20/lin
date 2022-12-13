@@ -31,7 +31,6 @@ server_answer interpreter::interpret(const request& req)
     if(st==CAN_RESERVE){
         if(req.args.size()==2){
             if(req.args[0]=="reserve"){
-                sleep(1);
                 int num = std::stoi(req.args[1]);
                 if(num>=0&&num<cache.get_row_count()){
                    return r_task_reserve(cache.get_data_parsed()[num][0],req.requester.get_username());
@@ -52,6 +51,20 @@ server_answer interpreter::interpret(const request& req)
                 }
             }
         }
+    }
+    if(st==CAN_CHECK){
+        if(req.args.size()==2){
+            if(req.args[0]=="check"){
+                int num = std::stoi(req.args[1]);
+                if(num>=0&&num<cache.get_row_count()){
+                    server_answer answ;
+                    answ.int_help = std::atoi(cache.get_data_parsed()[num][0].c_str());
+                    answ.int_code=server_answer::internal_code::SEND_FILE_S;
+                    return answ;
+                }
+            }
+        }
+
     }
 
     st = DEF;
@@ -82,9 +95,9 @@ server_answer interpreter::interpret(const request& req)
                         return t1;
                     }
                     if(req.args[2]=="finished"){
-                        
+                        st=CAN_CHECK;
                         server_answer t1 = r_task_list_finished(req.requester.get_username());
-                        
+                        cache = t1.recs;
                         return t1;
                     }
                 }

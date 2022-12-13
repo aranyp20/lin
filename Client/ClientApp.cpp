@@ -90,6 +90,12 @@ void client::send_even_file(char* buf,int length) const
       send_file(parsed[2]);
       sent = true;
     } 
+     if(parsed.size()==2&&parsed[0]=="check"){
+      send(csock, buf, length, 0);
+      recieve_file();
+      sent = true;
+    } 
+
     
     if(!sent)send(csock, buf, length, 0);
 
@@ -123,6 +129,7 @@ void client::run()
       }
       std::cout<<"------------------"<<std::endl<<std::endl;
 
+      sleep(3);
       std::cout<<ask_for_username(); fflush(stdout);
 
     }

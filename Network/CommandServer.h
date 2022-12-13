@@ -57,7 +57,7 @@ class assistant : public MyThread{
   void send_records(const records&) const;
   void send_answer(const server_answer&) const;
   void recieve_file(const std::string&, bool description = true) const;
-  void send_file(const std::string& filename) const;
+  void send_file(const std::string& filename, bool description = true) const;
 
 
 protected:

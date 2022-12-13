@@ -12,7 +12,8 @@ struct request{
 enum state{
     DEF = 0,
     CAN_RESERVE = 1,
-    CAN_UPLOAD = 2
+    CAN_UPLOAD = 2,
+    CAN_CHECK = 3
 };
 
 class interpreter{
