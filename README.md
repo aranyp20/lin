@@ -1,22 +1,25 @@
 # Házi feladat
 
 Név/Nevek NEPTUN kóddal:
-- Minta Név (ABC123)
+- Arany Péter (U4VQHM)
 
 # Feladat kiírás
-A minta feladat egy klasszikus *Aknakereső (Minesweeper)* játék elkészítése grafikus felülettel. A játék célja a mezőn lévő összes akna megtalálása, illetve az összes aknát nem rejtő mező felfedése. A játék indulásakor a pálya egyszínű négyzetekből áll, amelyek alatt aknák rejtőzködhetnek. A tábla mérete és az aknák száma nehézségi szintek alapján változik. A mezők állapota lehet lefedett, felfedett (szomszédos aknák számát mutatja), felfedett aknával, zászlós, kérdőjeles. Az egyes állapotok között az egér gombjaival válthatunk. stb, stb.
-A program az alábbi funkciókkal fog rendelkezni:
-* Grafikus felület Qt-ban megvalósítva.
-* Nehézségi szintek választása különböző tábla méretekkel és akna számokkal.
-* Az aknák véletlenszerű elhelyezése.
-* A játék menetének implementálása a felsorolt mezőállapotokkal, a köztük való váltással és a vége állapotok ellenőrzésével.
-* A játék idejének mérése.
+A feladat egy webszerver, amelyre felhasználók feladatokat tölthetnek fel, melyeket más felhasználók megoldhatnak. A más által feltöltött megoldást ezután le is tölthetjük.
 
 # Megvalósított program
-Milyen funkciókat sikerült megvalósítani? Milyen eltérések vannak a kiíráshoz képest? Hogyan kell bekonfigurálni, elindítani?
+* Bejelentkezés felhasználób, kijelentkezés
+* Fiók regisztrálása
+* Új feladat kitűzése
+* Megoldható feladatok kilistázása
+* Feladat lefoglalása
+* Lefoglalt feladatok kilistázása
+* Megoldás feltöltés
+* Felöltött feladathoz tartozó megoldás letöltése
+
+A felsoroltak közül mindent sikerült implementálnom, ezeken felül még viszont volt tervben reward, valamint tantárgy rendszer is, amikkel szűrni lehetett, hogy az általunk felrakott feladatokat kik oldhatják meg. Ezek időhiány miatt már nem lettek megvalósítva.
 
 **Bemutató videó URL:**
- https://youtu.be/CzOj-gtWJ-I 
+ https://youtu.be/CzOj-gtWJ-I (Pár óra és lesz hanggal is, valamiért nem vette fel.)
 
 # Tapasztalatok
-Milyen tapasztalatokat gyűjtött a feladat elkészítése során? Mi volt egyszerűbb / nehezebb a tervezetnél? Visszatekintve mit csinálna másként? (pár mondatban)
+Annak ellenére, hogy viszonylag korán elkezdtem, elég kapkodós lett, ami a kód minőségén eléggé meglátszódik. Még a hálózati kommunikációra is csináltam volna valami jobb protokollt.
