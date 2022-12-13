@@ -214,6 +214,8 @@ void assistant::on_run()
           recieve_file(std::to_string(answ.int_help));
         }else if(answ.int_code==server_answer::internal_code::SEND_FILE){
           send_file(std::to_string(answ.int_help));
+        }else if(answ.int_code==server_answer::internal_code::WAIT_FILE_S){
+          recieve_file(std::to_string(answ.int_help),false);
         }
        send_answer(answ);
       }

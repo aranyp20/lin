@@ -36,6 +36,20 @@ server_answer interpreter::interpret(const request& req)
             }
         }
     }
+    if(st==CAN_UPLOAD){
+        if(req.args.size()==3){
+            if(req.args[0]=="upload"){
+                int num = std::stoi(req.args[1]);
+                if(num>=0&&num<cache.get_row_count()){
+                    server_answer answ;
+                    answ.int_help = num;
+                    answ.int_code=server_answer::internal_code::WAIT_FILE_S;
+                    
+                    return answ;
+                }
+            }
+        }
+    }
 
     st = DEF;
 
@@ -55,6 +69,12 @@ server_answer interpreter::interpret(const request& req)
                     if(req.args[2]=="available"){
                         st=CAN_RESERVE;
                         server_answer t1 = r_task_list_available(req.requester.get_username());
+                        cache = t1.recs;
+                        return t1;
+                    }
+                    if(req.args[2]=="reserved"){
+                        st=CAN_UPLOAD;
+                        server_answer t1 = r_task_list_reserved(req.requester.get_username());
                         cache = t1.recs;
                         return t1;
                     }
@@ -98,7 +118,6 @@ server_answer interpreter::r_logout() const
 
 server_answer interpreter::r_register(const std::string& username) const
 {
-    //if(!(accessor->insert_user(account(username)).is_valid()))return server_answer("Unsuccessful registration.");
     accessor->insert_user(account(username));
 
     return server_answer("Registered.");
@@ -118,4 +137,11 @@ server_answer interpreter::r_task_reserve(const std::string& id,const std::strin
     answ.int_help = std::atoi(id.c_str());
     return answ;
 }
+
+
+server_answer interpreter::r_task_list_reserved(const std::string& username) const
+{
+    return accessor->get_tasks_reserved(username);
+}
+
 

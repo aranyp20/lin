@@ -84,7 +84,7 @@ records data_accessor::get_user(const std::string& username)
 records data_accessor::get_tasks_available(const std::string& username)
 {
     sql_connection connection = create_connection();
-    std::string query = "SELECT * FROM Tasks WHERE master_id NOT IN(select user_id from Users where username='"+username+"');";
+    std::string query = "SELECT * FROM Tasks WHERE master_id NOT IN(select user_id from Users where username='"+username+"') and slave_id='0';";
     records res = connection.execute_query(query.c_str());
 
     return res;
@@ -97,5 +97,14 @@ void data_accessor::assign_slave_to_task(const std::string& id, const std::strin
     std::string query = "update Tasks set slave_id = (select user_id from Users where username='"+username+"') where task_id ='"+id+"';";
     connection.execute_query(query.c_str());
 }
+
+records data_accessor::get_tasks_reserved(const std::string& username)
+{
+    sql_connection connection = create_connection();
+    std::string query = "SELECT * FROM Tasks WHERE slave_id IN(select user_id from Users where username='"+username+"');";
+    return connection.execute_query(query.c_str());
+
+}
+
 
 

@@ -34,7 +34,9 @@ struct server_answer{
         LOGIN = 1,
         LOGOUT = 2,
         WAIT_FILE = 3,
-        SEND_FILE = 4
+        SEND_FILE = 4,
+        WAIT_FILE_S = 5,
+        SEND_FILE_S =6
     };
 
     internal_code int_code = ONLY_EXTERNAL;

@@ -1,5 +1,1 @@
-A szep kerekerdo.
-
-
-
-kismaci fazik.
+Implementaljon egy binaris fat...

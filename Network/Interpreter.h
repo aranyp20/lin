@@ -26,6 +26,7 @@ class interpreter{
     server_answer r_logout() const;
     server_answer r_register(const std::string& username) const;
     server_answer r_task_list_available(const std::string& username) const;
+    server_answer r_task_list_reserved(const std::string& username) const;
     server_answer r_task_create(const task&) const;
     server_answer r_task_reserve(const std::string& task_id,const std::string& username) const;
 

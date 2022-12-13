@@ -1,1 +1,1 @@
-Ha ezt olvasod jo.... megegyszerik.
+Implementaljon egy binaris fat...k.

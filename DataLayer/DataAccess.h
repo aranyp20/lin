@@ -37,6 +37,7 @@ public:
     records get_users();
     records get_user(const std::string&);
     records get_tasks_available(const std::string&);
+    records get_tasks_reserved(const std::string&);
 
 
 };

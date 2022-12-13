@@ -84,6 +84,12 @@ void client::send_even_file(char* buf,int length) const
       send_file(parsed[2]);
       sent = true;
     }
+
+     if(parsed.size()==3&&parsed[0]=="upload"){
+      send(csock, buf, length, 0);
+      send_file(parsed[2]);
+      sent = true;
+    } 
     
     if(!sent)send(csock, buf, length, 0);
 
