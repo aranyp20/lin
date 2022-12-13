@@ -102,12 +102,12 @@ void client::run()
     char read_buf[1024];
     int len;
     int read_len;
-    
     std::cout<<ask_for_username(); fflush(stdout);
     
     while((len = read(STDIN_FILENO, buf, sizeof(buf))) > 0)
     {
       
+    std::cout<<"here."<<std::endl;
       send_even_file(buf,len);
       std::cout<<"------------------"<<std::endl;
       bool end = false;

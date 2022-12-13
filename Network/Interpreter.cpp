@@ -1,6 +1,8 @@
+#include <iostream>
+#include <unistd.h>
+
 #include "Interpreter.h"
 
-#include <iostream>
 request::request(const account& acc, char* buf, int length) : requester(acc)
 {
     std::string current_word;
@@ -29,6 +31,7 @@ server_answer interpreter::interpret(const request& req)
     if(st==CAN_RESERVE){
         if(req.args.size()==2){
             if(req.args[0]=="reserve"){
+                sleep(1);
                 int num = std::stoi(req.args[1]);
                 if(num>=0&&num<cache.get_row_count()){
                    return r_task_reserve(cache.get_data_parsed()[num][0],req.requester.get_username());
@@ -42,9 +45,9 @@ server_answer interpreter::interpret(const request& req)
                 int num = std::stoi(req.args[1]);
                 if(num>=0&&num<cache.get_row_count()){
                     server_answer answ;
-                    answ.int_help = num;
+                    answ.int_help = std::atoi(cache.get_data_parsed()[num][0].c_str());
                     answ.int_code=server_answer::internal_code::WAIT_FILE_S;
-                    
+                    accessor->ready_task(cache.get_data_parsed()[num][0]);
                     return answ;
                 }
             }
@@ -76,6 +79,12 @@ server_answer interpreter::interpret(const request& req)
                         st=CAN_UPLOAD;
                         server_answer t1 = r_task_list_reserved(req.requester.get_username());
                         cache = t1.recs;
+                        return t1;
+                    }
+                    if(req.args[2]=="finished"){
+                        
+                        server_answer t1 = r_task_list_finished(req.requester.get_username());
+                        
                         return t1;
                     }
                 }
@@ -142,6 +151,12 @@ server_answer interpreter::r_task_reserve(const std::string& id,const std::strin
 server_answer interpreter::r_task_list_reserved(const std::string& username) const
 {
     return accessor->get_tasks_reserved(username);
+}
+
+
+server_answer interpreter::r_task_list_finished(const std::string& username) const
+{
+    return accessor->show_finisheds(username);
 }
 
 

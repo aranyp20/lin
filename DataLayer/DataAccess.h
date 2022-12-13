@@ -33,11 +33,13 @@ public:
     void insert_user(const account&);
     int insert_task(const task&);
     void assign_slave_to_task(const std::string& id,const std::string& username);
+    void ready_task(const std::string& id);
 
     records get_users();
     records get_user(const std::string&);
     records get_tasks_available(const std::string&);
     records get_tasks_reserved(const std::string&);
+    records show_finisheds(const std::string&);
 
 
 };

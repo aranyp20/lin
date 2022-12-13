@@ -107,4 +107,21 @@ records data_accessor::get_tasks_reserved(const std::string& username)
 }
 
 
+void data_accessor::ready_task(const std::string& id)
+{
+    sql_connection connection = create_connection();
+    std::string query = "update Tasks set ready = 1 where task_id ='"+id+"';";
+    connection.execute_query(query.c_str());
+}
+
+records data_accessor::show_finisheds(const std::string& username)
+{
+    sql_connection connection = create_connection();
+
+    std::string query = "select * from Tasks where ready='1' and master_id IN(select user_id from Users where username='"+username+"');";
+    return connection.execute_query(query.c_str());
+
+}
+
+
 

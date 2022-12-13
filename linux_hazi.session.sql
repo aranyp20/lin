@@ -48,7 +48,7 @@ CREATE TABLE Tasks(
 
     master_id INT,
     slave_id INT DEFAULT 0,
-    required_finished_id INT DEFAULT 0,
+    ready INT DEFAULT 0,
 
     CONSTRAINT task_id_pk_c PRIMARY KEY (task_id),
     CONSTRAINT master_id_fk_c FOREIGN KEY (master_id) REFERENCES Users(user_id)
