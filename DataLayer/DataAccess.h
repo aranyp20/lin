@@ -11,6 +11,7 @@ class sql_connection{
     MYSQL *con;
 
 
+
 public:
     struct connection_details{
         const char *server, *user, *password, *database;
@@ -26,9 +27,13 @@ public:
 
 class data_accessor{
 
+
     sql_connection create_connection();
 
 public:
+
+    data_accessor();
+    ~data_accessor();
 
     void insert_user(const account&);
     int insert_task(const task&);

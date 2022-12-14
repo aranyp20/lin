@@ -195,8 +195,8 @@ void client::recieve_file() const
   char read_buf[1024];
   int write_fd;
   std::string t_fname = "./Downloads/dwn.txt";
-
-  write_fd = open(t_fname.c_str(),O_RDWR | O_CREAT, 0777);
+  remove(t_fname.c_str());
+  write_fd = open(t_fname.c_str(),O_WRONLY | O_CREAT, 0777);
   bool end = false;
    while(!end&&(read_len = recv(csock, read_buf, 1024, 0)) > 0){
       for(int i=0;i<read_len;i++){

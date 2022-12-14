@@ -30,6 +30,7 @@ void assistant::recieve_file(const std::string& filename, bool description) cons
   char read_buf[1024];
   int write_fd;
   std::string t_fname ;
+  remove(t_fname.c_str());
   if(description)t_fname = "./Files/Descr/"+filename+".txt";
   else t_fname = "./Files/Sol/"+filename+".txt";
 
