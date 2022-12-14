@@ -138,7 +138,7 @@ void client::run()
 
 void client::send_file(const std::string& filename) const
 {
-  std::cout<<"Küldés kezdete..."<<std::endl;
+  std::cout<<"Sending file..."<<std::endl;
   int sendable_fd;
   struct stat sendable_stat;
   off_t offset = 0;
@@ -153,7 +153,7 @@ void client::send_file(const std::string& filename) const
 
 
   close(sendable_fd);
-  std::cout<<"Küldés vége."<<std::endl;
+  std::cout<<"File was sent."<<std::endl;
 }
 
 client::~client()
@@ -208,7 +208,7 @@ void client::recieve_file() const
       }
    }
    close(write_fd);    
-  std::cout<<"File was comming."<<std::endl;
+  std::cout<<"File arrived."<<std::endl;
 }
 
 

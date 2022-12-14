@@ -46,12 +46,12 @@ void assistant::recieve_file(const std::string& filename, bool description) cons
       }
    }
    close(write_fd);    
-  std::cout<<"File was comming."<<std::endl;
+  std::cout<<"File arrived."<<std::endl;
 }
 
 void assistant::send_file(const std::string& filename, bool description) const
 {
-  std::cout<<"Küldés kezdete..."<<std::endl;
+  std::cout<<"Sending file..."<<std::endl;
   sleep(2);
   int sendable_fd;
   struct stat sendable_stat;
@@ -70,7 +70,7 @@ void assistant::send_file(const std::string& filename, bool description) const
 
 
   close(sendable_fd);
-  std::cout<<"Küldés vége."<<std::endl;
+  std::cout<<"File was sent."<<std::endl;
 }
 
 
@@ -148,7 +148,7 @@ void command_server::Run()
         if(getnameinfo((struct sockaddr*)&addr, addrlen, ips, sizeof(ips), servs, sizeof(servs), 0) == 0)
     {
       assistant* ass = new assistant(my_accessor,csock);
-      std::cout<<"Kapcsolódás.."<<std::endl;
+      std::cout<<"Connecting.."<<std::endl;
       ass->start();
       assistants.push_back(ass);
       
@@ -198,7 +198,7 @@ assistant::assistant(data_accessor* const da,int socket) : inter(da),socket(sock
 
 void assistant::on_run()
 {
-  std::cout<<"Assistent elkezdett dolgozni."<<std::endl;
+  std::cout<<"Assistent assigned to client."<<std::endl;
   char buf[1024];
   int len;
   while((len = recv(socket, buf, sizeof(buf), 0)) > 0)
@@ -229,7 +229,7 @@ void assistant::on_run()
       
     }
     
-    printf("Kapcsolat zárása.\n");
+    printf("Connection closed.\n");
     close(socket);
     dead = true;
 }
