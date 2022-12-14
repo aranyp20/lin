@@ -30,9 +30,9 @@ void assistant::recieve_file(const std::string& filename, bool description) cons
   char read_buf[1024];
   int write_fd;
   std::string t_fname ;
-  remove(t_fname.c_str());
   if(description)t_fname = "./Files/Descr/"+filename+".txt";
   else t_fname = "./Files/Sol/"+filename+".txt";
+  remove(t_fname.c_str());
 
   write_fd = open(t_fname.c_str(),O_RDWR | O_CREAT, 0777);
   bool end = false;
@@ -52,7 +52,7 @@ void assistant::recieve_file(const std::string& filename, bool description) cons
 void assistant::send_file(const std::string& filename, bool description) const
 {
   std::cout<<"Sending file..."<<std::endl;
-  sleep(2);
+  //sleep(2);
   int sendable_fd;
   struct stat sendable_stat;
   off_t offset = 0;
